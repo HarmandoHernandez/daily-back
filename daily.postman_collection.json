@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "75b33904-4a77-464e-bce1-f5fef935484f",
+		"name": "daily",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"armando.h@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{auth}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{auth}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Armando\",\n    \"email\": \"armando.h@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{auth}}/register",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{auth}}",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "valid token",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"host": true,
+					"user-agent": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-token",
+						"value": "dada.dsad.dada",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{auth}}/renew",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{auth}}",
+						"renew"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
