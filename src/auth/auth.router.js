@@ -1,35 +1,45 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
-const { crearUsuario, loginUsuario, revalidarToken } = require('../controllers/auth')
-const { validarCampos } = require('../middlewares/validar-campos')
-const { validarJWT } = require('../middlewares/validar-jwt')
-const { log } = require('../middlewares/log')
 
-const VALIDATORS = require('../enums/validators')
-const AUTH_PARAMS = require('../enums/auth-params')
+const {
+  validParams,
+  validJWT,
+  logger
+} = require('./../shared/middlewares')
+
+const {
+  VALIDATORS,
+  AUTH_PARAMS
+} = require('./../shared/enums')
+
+const {
+  createUser,
+  loginUser,
+  validToken
+} = require('./auth.controller')
 
 const router = Router()
 
 // Crear un nuevo usuario
 router.post('/register', [
-  log,
+  logger,
   check(AUTH_PARAMS.NAME, VALIDATORS.REQUIRED).not().isEmpty(),
   check(AUTH_PARAMS.EMAIL, VALIDATORS.INVALID).isEmail(),
   check(AUTH_PARAMS.PASSWORD, VALIDATORS.LENGTH + '=8-50').isLength({ min: 8, max: 50 }),
-  validarCampos
-], crearUsuario)
+  validParams
+], createUser)
 
 // Login de usuario
 router.post('/', [
-  log,
+  logger,
   check(AUTH_PARAMS.EMAIL, VALIDATORS.CORRUPT).isEmail(),
   check(AUTH_PARAMS.PASSWORD, VALIDATORS.LENGTH + '=8-50').isLength({ min: 8, max: 50 }),
-  validarCampos
-], loginUsuario)
+  validParams
+], loginUser)
 
 // Validar y revalidar token
 router.get('/renew',
-  log,
-  validarJWT, revalidarToken)
+  logger,
+  validJWT, validToken)
 
 module.exports = router

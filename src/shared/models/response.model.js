@@ -1,6 +1,5 @@
 class GeneralFormat {
   constructor (status, message) {
-    console.log(status, ': ', message)
     this.status = status
     this.message = message
   }
