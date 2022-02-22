@@ -1,5 +1,6 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
+const AuthController = require('./auth.controller')
 
 const {
   validParams,
@@ -12,13 +13,8 @@ const {
   AUTH_PARAMS
 } = require('./../shared/enums')
 
-const {
-  createUser,
-  loginUser,
-  validToken
-} = require('./auth.controller')
-
 const router = Router()
+const authController = new AuthController()
 
 // Crear un nuevo usuario
 router.post('/register', [
@@ -27,7 +23,7 @@ router.post('/register', [
   check(AUTH_PARAMS.EMAIL, VALIDATORS.INVALID).isEmail(),
   check(AUTH_PARAMS.PASSWORD, VALIDATORS.LENGTH + '=8-50').isLength({ min: 8, max: 50 }),
   validParams
-], createUser)
+], authController.createUser)
 
 // Login de usuario
 router.post('/', [
@@ -35,11 +31,12 @@ router.post('/', [
   check(AUTH_PARAMS.EMAIL, VALIDATORS.CORRUPT).isEmail(),
   check(AUTH_PARAMS.PASSWORD, VALIDATORS.LENGTH + '=8-50').isLength({ min: 8, max: 50 }),
   validParams
-], loginUser)
+], authController.loginUser)
 
 // Validar y revalidar token
+// TODO: validar que no esten vacios los campos
 router.get('/renew',
   logger,
-  validJWT, validToken)
+  validJWT, authController.refreshToken)
 
 module.exports = router

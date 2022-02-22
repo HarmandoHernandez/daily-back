@@ -26,9 +26,8 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id
     delete returnedObject._id
     delete returnedObject.__v
-    delete returnedObject.password
   }
 })
 
 // Definicion de modelos (Collection) con referencia al esquema
-module.exports = model('Usuario', userSchema)
+module.exports = model('User', userSchema)
