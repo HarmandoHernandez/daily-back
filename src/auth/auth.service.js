@@ -18,6 +18,14 @@ const {
 const authDal = new AuthDAL()
 
 class AuthService {
+  // TODO: Definir modelo diferente al Schema
+  /**
+   *
+   * @param {string} email
+   * @param {string} name
+   * @param {string} password
+   * @returns {Promise<GeneralFormat>}
+   */
   async singup (email, name, password) {
     try {
       const user = await authDal.getByEmail(email)

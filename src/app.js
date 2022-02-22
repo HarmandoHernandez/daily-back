@@ -7,7 +7,8 @@ const Database = require('./app.db')
 const port = process.env.PORT
 const database = new Database()
 const router = [
-  new Route('/api/auth', require('./auth/auth.router'))
+  new Route('/api/auth', require('./auth/auth.router')),
+  new Route('/api/activity', require('./activity/activity.router'))
 ]
 
 // Create server

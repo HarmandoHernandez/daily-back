@@ -2,12 +2,26 @@
 const { Schema, model } = require('mongoose')
 
 const activitySchema = new Schema({
-  content: String,
-  date: Date,
-  important: Boolean,
+  icon: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  startTime: {
+    type: String,
+    required: true
+  },
+  durationTime: {
+    type: Number,
+    required: true
+  },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   }
 })
 
@@ -15,6 +29,7 @@ const activitySchema = new Schema({
 activitySchema.set('toJSON', {
   transform: (_document, returnedObject) => {
     returnedObject.id = returnedObject._id
+    delete returnedObject.user
     delete returnedObject._id
     delete returnedObject.__v
   }

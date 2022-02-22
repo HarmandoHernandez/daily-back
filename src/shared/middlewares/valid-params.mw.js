@@ -1,15 +1,16 @@
 const { response } = require('express')
 const { validationResult } = require('express-validator')
 
-const { Error } = require('../models')
-const { responseError } = require('../helpers/responses.helper')
-const VALIDATORS = require('../enums/validators.enum')
+const { Error, GeneralFormat } = require('../models')
+const { STATUS } = require('../enums')
 
 const validParams = (req, res = response, next) => {
   const validtionResults = validationResult(req)
   const errors = validtionResults.array().map(e => new Error(e.msg, e.param))
   if (errors.length > 0) {
-    return responseError(res, 400, VALIDATORS.ERROR, errors)
+    return res
+      .status(400)
+      .json(new GeneralFormat(STATUS.ERROR, errors))
   }
 
   next()

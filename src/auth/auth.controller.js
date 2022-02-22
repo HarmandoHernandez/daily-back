@@ -15,26 +15,6 @@ class AuthController {
       return res.status(200).json(response)
     }
     return res.status(400).json(response)
-    /* try {
-      const usuario = await Usuario.findOne({ email })
-      if (usuario) {
-        return responseError(res, 400, VALIDATORS.INVALID, AUTH_PARAMS.EMAIL)
-      }
-      // Crear usuario con el modelo
-      const dbUser = new Usuario(req.body)
-      // Hashear la contraseña
-      const salt = bcrypt.genSaltSync()
-      dbUser.password = bcrypt.hashSync(password, salt)
-      // Generar el JWT
-      const token = await generateJWT(dbUser.id, name)
-      // Guardar usuario en DB
-      await dbUser.save()
-      // Generar respuesta exitosa
-      responseSuccess(res, 201, dbUser.id, name, token)
-    } catch (error) {
-      console.error(error)
-      return responseError(res)
-    } */
   }
 
   async loginUser (req, res = response) {

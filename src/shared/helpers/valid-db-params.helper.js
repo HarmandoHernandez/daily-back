@@ -1,12 +1,5 @@
 const { Usuario } = require('./models')
 
-/* const esRoleValido = async (rol = '') => {
-  const existeRol = await Role.findOne({ rol })
-  if (!existeRol) {
-    throw new Error(`El rol ${rol} no está registrado en la BD`)
-  }
-}
- */
 const emailExiste = async (correo = '') => {
   // Verificar si el correo existe
   const existeEmail = await Usuario.findOne({ correo })
@@ -15,7 +8,7 @@ const emailExiste = async (correo = '') => {
   }
 }
 
-const existeUsuarioPorId = async (id) => {
+const isOwner = async (id) => {
   // Verificar si el correo existe
   const existeUsuario = await Usuario.findById(id)
   if (!existeUsuario) {
@@ -23,29 +16,7 @@ const existeUsuarioPorId = async (id) => {
   }
 }
 
-/**
- * Categorias
- */
-/* const existeCategoriaPorId = async (id) => {
-  // Verificar si el correo existe
-  const existeCategoria = await Categoria.findById(id)
-  if (!existeCategoria) {
-    throw new Error(`El id no existe ${id}`)
-  }
-}
- */
-/**
- * Productos
- */
-/* const existeProductoPorId = async (id) => {
-  // Verificar si el correo existe
-  const existeProducto = await Producto.findById(id)
-  if (!existeProducto) {
-    throw new Error(`El id no existe ${id}`)
-  }
-}
- */
 module.exports = {
   emailExiste,
-  existeUsuarioPorId
+  isOwner
 }

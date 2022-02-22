@@ -8,7 +8,8 @@ const VALIDATORS = {
   LENGTH: 'LENGTH',
   CORRUPT: 'CORRUPT',
   WITHOUT: 'WITHOUT',
-  EXIST: 'EXIST'
+  EXIST: 'EXIST',
+  NOEXIST: 'NOEXIST'
 }
 
 module.exports = VALIDATORS
