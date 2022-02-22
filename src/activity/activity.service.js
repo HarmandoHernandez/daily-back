@@ -8,11 +8,8 @@ const {
   GeneralFormat
 } = require('../shared/models')
 
-const {
-  VALIDATORS,
-  ACTIVITY_PARAMS,
-  STATUS
-} = require('../shared/enums')
+const { VALIDATORS, STATUS } = require('../shared/enums')
+const ACTIVITY_PARAMS = require('./activity.enum')
 
 const activityDAL = new ActivityDAL()
 
@@ -44,6 +41,11 @@ class ActivityService {
     try {
       // TODO: guardar id en collection User
       const activityDb = await activityDAL.createOne(activityData)
+      if (activityDb === null) {
+        return new GeneralFormat(
+          STATUS.ERROR,
+          new CError(VALIDATORS.INCORRECT, ACTIVITY_PARAMS.ACTIVITY))
+      }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       console.error(error)
@@ -57,6 +59,12 @@ class ActivityService {
   async updateOne (activityData) {
     try {
       const activityDb = await activityDAL.updateOne(activityData)
+      // Si no es null
+      if (activityDb === null) {
+        return new GeneralFormat(
+          STATUS.ERROR,
+          new CError(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY))
+      }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       console.error(error)
@@ -70,6 +78,12 @@ class ActivityService {
   async deleteOne (id) {
     try {
       const activityDb = await activityDAL.deleteOne(id)
+      // TODO: Optimizar para todas las funciones
+      if (activityDb === null) {
+        return new GeneralFormat(
+          STATUS.ERROR,
+          new CError(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY))
+      }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       console.error(error)

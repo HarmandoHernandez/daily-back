@@ -2,8 +2,8 @@ const { response, request } = require('express')
 const jwt = require('jsonwebtoken')
 
 const { responseError } = require('../helpers/responses.helper')
-const { VALIDATORS, AUTH_PARAMS } = require('../enums')
-
+const { VALIDATORS } = require('./../enums')
+const AUTH_PARAMS = require('./../../auth/auth.enum')
 const validJWT = (req = request, res = response, next) => {
   const token = req.header('x-token')
   if (!token) {

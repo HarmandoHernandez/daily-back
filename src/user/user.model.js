@@ -13,12 +13,13 @@ const userSchema = Schema({
   password: {
     type: String,
     required: true
-  }
-  /* activityes: [{
+  },
+  activities: [{
     type: Schema.Types.ObjectId,
     ref: 'Activity',
+    default: [],
     required: false
-  }] */
+  }]
 })
 
 userSchema.set('toJSON', {

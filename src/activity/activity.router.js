@@ -7,10 +7,8 @@ const {
   logger
 } = require('../shared/middlewares')
 
-const {
-  VALIDATORS,
-  ACTIVITY_PARAMS
-} = require('../shared/enums')
+const { VALIDATORS } = require('../shared/enums')
+const ACTIVITY_PARAMS = require('./activity.enum')
 
 const router = Router()
 const activityController = new ActivityController()

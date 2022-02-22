@@ -1,7 +1,9 @@
 // @ts-check
 const { generateJWT } = require('../shared/helpers/jwt.helper')
 const bcrypt = require('bcryptjs')
-const AuthDAL = require('./auth.dal')
+const UserService = require('./../user/user.service')
+// Instances
+const userService = new UserService()
 
 const {
   Error: CError,
@@ -11,11 +13,10 @@ const {
 
 const {
   VALIDATORS,
-  AUTH_PARAMS,
   STATUS
 } = require('../shared/enums')
-
-const authDal = new AuthDAL()
+const AUTH_PARAMS = require('./auth.enum')
+const USER_PARAMS = require('./../user/user.enum')
 
 class AuthService {
   // TODO: Definir modelo diferente al Schema
@@ -28,25 +29,26 @@ class AuthService {
    */
   async singup (email, name, password) {
     try {
-      const user = await authDal.getByEmail(email)
-      if (user !== null) { // Exist account
+      const respGetByEmail = await userService.getOneByEmail(email)
+      if (respGetByEmail.status !== STATUS.ERROR &&
+        respGetByEmail.message.error !== VALIDATORS.NOEXIST
+      ) {
         return new GeneralFormat(
           STATUS.ERROR,
-          new CError(VALIDATORS.EXIST, AUTH_PARAMS.EMAIL)
-        )
+          new CError(VALIDATORS.EXIST, USER_PARAMS.USER))
       }
 
-      const salt = bcrypt.genSaltSync()
-      const passwordHash = bcrypt.hashSync(password, salt)
-
-      const userDb = await authDal.addUser(name, email, passwordHash)
+      const userData = { email, name, password }
+      const respCreateUser = await userService.createUser(userData)
+      console.log(respCreateUser)
+      if (respCreateUser.status !== STATUS.SUCCESS) return respCreateUser
       // @ts-ignore
-      const token = await this.getNewToken(userDb._id, name)
+      const token = await this.getNewToken(respCreateUser.message._id, respCreateUser.message.name)
 
       return new GeneralFormat(
         STATUS.SUCCESS,
         // @ts-ignore
-        new SuccessFormat(userDb._id, userDb.name, token)
+        new SuccessFormat(respCreateUser.message._id, respCreateUser.message.name, token)
       )
     } catch (error) {
       console.error(error)
@@ -65,16 +67,14 @@ class AuthService {
    */
   async signin (email, password) {
     try {
-      const user = await authDal.getByEmail(email)
-      if (user === null) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          new CError(VALIDATORS.WITHOUT, AUTH_PARAMS.EMAIL)
-        )
-      }
+      const respGetByEmail = await userService.getOneByEmail(email)
+      if (respGetByEmail.status === STATUS.ERROR) return respGetByEmail
+
+      const user = respGetByEmail.message
       // @ts-ignore
       const validPassword = bcrypt.compareSync(password, user.password)
       if (!validPassword) {
+        // TODO: Simplificar usando el helpers/repinses.helper.js
         return new GeneralFormat(
           STATUS.ERROR,
           new CError(VALIDATORS.INVALID, AUTH_PARAMS.PASSWORD)
