@@ -19,8 +19,17 @@ class UserDAL {
     return await User.findOne({ email })
   }
 
-  async updateOne (userData) {
-    return await User.findByIdAndUpdate(userData.id, userData, { new: true })
+  async includActivity (userId, activityId) {
+    const user = await User.findById(userId)
+    user.activities = user.activities.concat(activityId)
+    return await user.save()
+  }
+
+  async removeActivity (userId, activityId) {
+    const user = await User.findById(userId)
+    const indexActivityId = user.activities.indexOf(activityId)
+    user.activities.splice(indexActivityId, 1)
+    return await user.save()
   }
 }
 

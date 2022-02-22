@@ -10,25 +10,13 @@ const UserDAL = require('./user.dal')
 const userDal = new UserDAL()
 
 class UserService {
-  async updateUser (userData) {
-    try {
-      const userDb = await userDal.updateOne(userData)
-      return new GeneralFormat(STATUS.SUCCESS, userDb)
-    } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'USER:UPDATE')
-      )
-    }
-  }
-
   async createUser (userData) {
     try {
       const salt = bcrypt.genSaltSync()
       userData.password = bcrypt.hashSync(userData.password, salt)
 
       const activityDb = await userDal.createOne(userData)
+      // TODO: Validar que no sea null
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       console.error(error)
@@ -71,6 +59,34 @@ class UserService {
       return new GeneralFormat(
         STATUS.ERROR,
         new CError('FATAL_ERROR', 'USER:GET_BY_ID')
+      )
+    }
+  }
+
+  async includActivity (userId, activityId) {
+    try {
+      const userDb = await userDal.includActivity(userId, activityId)
+      // TODO: Validar que no sea null
+      return new GeneralFormat(STATUS.SUCCESS, userDb)
+    } catch (error) {
+      console.error(error)
+      return new GeneralFormat(
+        STATUS.ERROR,
+        new CError('FATAL_ERROR', 'USER:UPDATE')
+      )
+    }
+  }
+
+  async removeActivity (userId, activityId) {
+    try {
+      const userDb = await userDal.removeActivity(userId, activityId)
+      // TODO: Validar que no sea null
+      return new GeneralFormat(STATUS.SUCCESS, userDb)
+    } catch (error) {
+      console.error(error)
+      return new GeneralFormat(
+        STATUS.ERROR,
+        new CError('FATAL_ERROR', 'USER:UPDATE')
       )
     }
   }

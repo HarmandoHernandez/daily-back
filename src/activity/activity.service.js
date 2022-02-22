@@ -1,5 +1,6 @@
 // @ts-check
 const ActivityDAL = require('./activity.dal')
+const UserService = require('./../user/user.service')
 // eslint-disable-next-line no-unused-vars
 const ActivityC = require('./activity')
 
@@ -46,6 +47,8 @@ class ActivityService {
           STATUS.ERROR,
           new CError(VALIDATORS.INCORRECT, ACTIVITY_PARAMS.ACTIVITY))
       }
+      const userService = new UserService()
+      await userService.includActivity(activityData.user, activityDb._id)
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       console.error(error)
@@ -84,6 +87,9 @@ class ActivityService {
           STATUS.ERROR,
           new CError(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY))
       }
+      const userService = new UserService()
+      await userService.removeActivity(activityDb.user, activityDb._id)
+
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       console.error(error)
