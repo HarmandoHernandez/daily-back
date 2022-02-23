@@ -1,18 +1,18 @@
 {
 	"info": {
-		"_postman_id": "75b33904-4a77-464e-bce1-f5fef935484f",
+		"_postman_id": "0be47533-34f0-4f9d-a5b3-c990276506f3",
 		"name": "daily",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "login",
+			"name": "auth/login",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"armando.h@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
+					"raw": "{\n    \"email\": \"armando.ssssshhzss@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -32,13 +32,13 @@
 			"response": []
 		},
 		{
-			"name": "register",
+			"name": "auth/register",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Armando\",\n    \"email\": \"armando.h@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
+					"raw": "{\n    \"name\": \"Armando\",\n    \"email\": \"armando.ssssshhzss@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -59,7 +59,7 @@
 			"response": []
 		},
 		{
-			"name": "valid token",
+			"name": "auth/valid token",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true,
 				"disabledSystemHeaders": {
@@ -75,7 +75,7 @@
 				"header": [
 					{
 						"key": "x-token",
-						"value": "dada.dsad.dada",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MjA0MzE4OTVkZWVjMDk3Mjk1Mzc1YTIiLCJuYW1lIjoiQXJtYW5kbyIsImlhdCI6MTY0NTQ2ODQ4OSwiZXhwIjoxNjQ1NTA0NDg5fQ.zW4DUVFYZFhOAqWwPj2667tWRhAOwxPIdrG5HRECkOA",
 						"type": "default"
 					}
 				],
@@ -96,6 +96,120 @@
 					"path": [
 						"{{auth}}",
 						"renew"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activity",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"icon\": \"X\",\n    \"title\": \"Work2\",\n    \"startTime\": \"09:00\",\n    \"durationTime\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{activity}}",
+						"6214fe9a344514b33f7bc34b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activity",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/621527438042bba180f2a4be",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{activity}}",
+						"6214fe9a344514b33f7bc34b",
+						"621527438042bba180f2a4be"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activity",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"icon\": \"X\",\n    \"title\": \"Work1\",\n    \"startTime\": \"09:00\",\n    \"durationTime\": 111\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/62152c97da0017754ef68d34",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{activity}}",
+						"6214fe9a344514b33f7bc34b",
+						"62152c97da0017754ef68d34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activity Copy",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/621527438042bba180f2a4be",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{activity}}",
+						"6214fe9a344514b33f7bc34b",
+						"621527438042bba180f2a4be"
 					]
 				}
 			},

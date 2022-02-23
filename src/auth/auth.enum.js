@@ -1,7 +1,5 @@
 const AUTH_PARAMS = {
-  NAME: 'name',
-  EMAIL: 'email',
-  PASSWORD: 'password',
+  USER: 'user',
   TOKEN: 'token'
 }
 
