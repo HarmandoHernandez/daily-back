@@ -1,20 +1,17 @@
 // @ts-check
-export default class ActivityFormat {
-  /**
-     * Auth Success format by API response
-     * @param {string} id User identification
-     * @param {string} name User name
-     * @param {string} token User token
-     */
 
+// eslint-disable-next-line no-unused-vars
+const { ObjectId } = require('mongoose')
+
+class ActivityFormat {
   /**
    * Activity format by API response
-   * @param {*} id Activity identification
-   * @param {*} icon Activity icon
-   * @param {*} title Activity title
-   * @param {*} startTime Activity start time (XX:XX) 24h
-   * @param {*} durationTime Activity duration (mins)
-   * @param {*} user Owner user identification
+   * @param {ObjectId} id Activity identification
+   * @param {string} icon Activity icon
+   * @param {string} title Activity title
+   * @param {string} startTime Activity start time (XX:XX) 24h
+   * @param {number} durationTime Activity duration (mins)
+   * @param {ObjectId} user Owner user identification
    */
   constructor (id, icon, title, startTime, durationTime, user) {
     this.id = id
@@ -25,3 +22,5 @@ export default class ActivityFormat {
     this.user = user
   }
 }
+
+module.exports = ActivityFormat

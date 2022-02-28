@@ -1,110 +1,115 @@
 // @ts-check
 
-// TODO: ESTANDARIZAR RESPUESTAS:
-/**
- * NO SEA POSIBLE OTRO TIPO DE RESCPUESTA SI NO ESTAN ESTANDARIZADAS EN UN UTIL
- * HACER MODELO PARA SUCCESS Y ERROR
- */
 const { generateJWT } = require('../shared/helpers/jwt.helper')
 const bcrypt = require('bcryptjs')
+// eslint-disable-next-line no-unused-vars
+const { ObjectId } = require('mongoose')
+
+// eslint-disable-next-line no-unused-vars
+const GeneralFormat = require('../shared/helpers/responses/general.format')
 const UserService = require('./../user/user.service')
-// Instances
-const userService = new UserService()
 
-const {
-  Error: CError,
-  GeneralFormat,
-  SuccessFormat
-} = require('../shared/models')
-
-const {
-  VALIDATORS,
-  STATUS
-} = require('../shared/enums')
 const AUTH_PARAMS = require('./auth.enum')
 const USER_PARAMS = require('./../user/user.enum')
+const STATUS = require('../shared/enums/status.enum')
+const VALIDATORS = require('../shared/enums/validators.enum')
+
+const getAnErrorResponse = require('../shared/helpers/responses/error.response')
+const getAuthResponse = require('../shared/helpers/responses/auth.response')
+
+// Instances
+const userService = new UserService()
 
 class AuthService {
   // TODO: Definir modelo diferente al Schema
   /**
-   *
-   * @param {string} email
-   * @param {string} name
-   * @param {string} password
-   * @returns {Promise<GeneralFormat>}
+   * Register new acount in app
+   * @param {string} email User email
+   * @param {string} name User name
+   * @param {string} password User password
+   * @returns {Promise<GeneralFormat>} General response
    */
   async singup (email, name, password) {
     try {
-      const respGetByEmail = await userService.getOneByEmail(email)
-      if (respGetByEmail.status !== STATUS.ERROR &&
-        respGetByEmail.message.error !== VALIDATORS.NOEXIST
+      // Check non-duplicate user in DB
+      const userResp = await userService.getOneByEmail(email)
+      if (
+        userResp.status !== STATUS.ERROR &&
+        userResp.message.error !== VALIDATORS.NOEXIST
       ) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          [new CError(VALIDATORS.EXIST, USER_PARAMS.USER)])
+        return getAnErrorResponse(VALIDATORS.EXIST, USER_PARAMS.USER)
       }
-
+      // Create user in DB
       const userData = { email, name, password }
-      const respCreateUser = await userService.createUser(userData)
-      console.log(respCreateUser)
-      if (respCreateUser.status !== STATUS.SUCCESS) return respCreateUser
-      // @ts-ignore
-      const token = await this.getNewToken(respCreateUser.message._id, respCreateUser.message.name)
+      const userCreated = await userService.createUser(userData)
+      if (userCreated.status !== STATUS.SUCCESS) return userCreated
 
-      return new GeneralFormat(
-        STATUS.SUCCESS,
-        // @ts-ignore
-        new SuccessFormat(respCreateUser.message._id, respCreateUser.message.name, token)
-      )
+      const user = userResp.message
+
+      // Get token
+      const tokenResp = await this.getNewToken(user._id, user.name)
+      if (tokenResp.status !== STATUS.SUCCESS) return tokenResp
+      // @ts-ignore
+      const token = tokenResp.message.token
+
+      // Response
+      return getAuthResponse({ uid: user._id, name: user.name, token })
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'SIGNUP')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'SIGNUP', error)
     }
   }
 
   /**
-   *
-   * @param {string} email
-   * @param {string} password
-   * @returns {Promise<GeneralFormat>}
+   * Start session in app
+   * @param {string} email User email
+   * @param {string} password User password
+   * @returns {Promise<GeneralFormat>} General Response
    */
   async signin (email, password) {
     try {
-      const respGetByEmail = await userService.getOneByEmail(email)
-      if (respGetByEmail.status === STATUS.ERROR) return respGetByEmail
+      // Chech user exist in DB
+      const userResp = await userService.getOneByEmail(email)
+      if (userResp.status === STATUS.ERROR) return userResp
 
-      const user = respGetByEmail.message
+      const { _id: uid, name, password: pwd } = userResp.message
+
+      // Comparate Passwords
       // @ts-ignore
-      const validPassword = bcrypt.compareSync(password, user.password)
+      const validPassword = bcrypt.compareSync(password, pwd)
       if (!validPassword) {
-        // TODO: Simplificar usando el helpers/repinses.helper.js
-        return new GeneralFormat(
-          STATUS.ERROR,
-          // TODO: Al ser error, debe de enviar un arreglo con errores
-          [new CError(VALIDATORS.INVALID, AUTH_PARAMS.PASSWORD)]
-        )
+        return getAnErrorResponse(VALIDATORS.INVALID, AUTH_PARAMS.PASSWORD)
       }
+
+      // Get token
+      const tokenResp = await this.getNewToken(uid, name)
+      if (tokenResp.status !== STATUS.SUCCESS) return tokenResp
       // @ts-ignore
-      const token = await this.getNewToken(user._id, user.name)
-      return new GeneralFormat(
-        STATUS.SUCCESS,
-        // @ts-ignore
-        new SuccessFormat(user._id, user.name, token)
-      )
+      const token = tokenResp.message.token
+
+      // Response
+      return getAuthResponse({ uid, name, token })
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'SIGNIN')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'SIGNIN', error)
     }
   }
 
+  /**
+   * Refresh token or generate new token of an user
+   * @param {ObjectId} uid User identification
+   * @param {string} name User name
+   * @returns New token
+   */
   async getNewToken (uid, name) {
-    return await generateJWT(uid, name)
+    try {
+      const token = await generateJWT(uid, name)
+      if (token.length === 0) {
+        return getAnErrorResponse(VALIDATORS.FATAL_ERROR, AUTH_PARAMS.TOKEN)
+      }
+      // Response
+      return getAuthResponse({ uid, name, token })
+    } catch (error) {
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'NEWTOKEN', error)
+    }
   }
 }
 

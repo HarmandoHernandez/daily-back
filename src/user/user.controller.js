@@ -10,10 +10,8 @@ const userService = new UserService()
 class UserController {
   /**
      * Get an User
-     * @param {request} req
-     * @param {response} res
      */
-  async getById (req, res) {
+  async getById (req = request, res = response) {
     const { id } = req.params
     const response = await userService.getOneById(id)
     if (response.status === STATUS.SUCCESS) {

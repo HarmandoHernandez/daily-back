@@ -5,7 +5,7 @@ const { check } = require('express-validator')
 const { validParams, logger } = require('../shared/middlewares')
 const USER_PARAMS = require('./user.enum')
 const UserController = require('./user.controller')
-const { default: VALIDATORS } = require('../shared/enums/validators.enum')
+const VALIDATORS = require('../shared/enums/validators.enum')
 // Instances
 const router = Router()
 const userController = new UserController()

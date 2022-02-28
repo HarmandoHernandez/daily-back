@@ -1,5 +1,5 @@
 // @ts-check
-export default class ErrorFormat {
+class ErrorFormat {
   /**
      * Custom Error format by API response
      * @param {string} error Element error type
@@ -10,3 +10,5 @@ export default class ErrorFormat {
     this.param = param
   }
 }
+
+module.exports = ErrorFormat

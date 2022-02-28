@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"armando.ssssshhzss@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
+					"raw": "{\n    \"email\": \"armandohdez@gmail.com\",\n    \"password\": \"armandohdez\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -38,7 +38,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Armando\",\n    \"email\": \"armando.ssssshhzss@gmail.com\",\n    \"password\": \"dsdsdsdsd\"\n}",
+					"raw": "{\n    \"name\": \"Armando\",\n    \"email\": \"armandohdez@gmail.com\",\n    \"password\": \"armandohdez\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -75,7 +75,7 @@
 				"header": [
 					{
 						"key": "x-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MjA0MzE4OTVkZWVjMDk3Mjk1Mzc1YTIiLCJuYW1lIjoiQXJtYW5kbyIsImlhdCI6MTY0NTQ2ODQ4OSwiZXhwIjoxNjQ1NTA0NDg5fQ.zW4DUVFYZFhOAqWwPj2667tWRhAOwxPIdrG5HRECkOA",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MjE1NzFhN2U3ZjM4NGExMDczYzYyZjEiLCJuYW1lIjoiQXJtYW5kbyIsImlhdCI6MTY0NTU3MjUxOSwiZXhwIjoxNjQ1NjA4NTE5fQ.5ViYJ47lOwXqBldwVEjNH6mYgUqvclw_Jod0qIiJzxA",
 						"type": "default"
 					}
 				],
@@ -116,13 +116,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b",
+					"raw": "{{URL}}/{{activity}}/621571a7e7f384a1073c62f1",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"{{activity}}",
-						"6214fe9a344514b33f7bc34b"
+						"621571a7e7f384a1073c62f1"
 					]
 				}
 			},
@@ -146,14 +146,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/621527438042bba180f2a4be",
+					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/621571cde7f384a1073c62f3",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"{{activity}}",
 						"6214fe9a344514b33f7bc34b",
-						"621527438042bba180f2a4be"
+						"621571cde7f384a1073c62f3"
 					]
 				}
 			},
@@ -174,21 +174,21 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/62152c97da0017754ef68d34",
+					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/621571cde7f384a1073c62f3",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"{{activity}}",
 						"6214fe9a344514b33f7bc34b",
-						"62152c97da0017754ef68d34"
+						"621571cde7f384a1073c62f3"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "activity Copy",
+			"name": "activity",
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -202,14 +202,44 @@
 					}
 				},
 				"url": {
-					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/621527438042bba180f2a4be",
+					"raw": "{{URL}}/{{activity}}/6214fe9a344514b33f7bc34b/621571cde7f384a1073c62f3",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"{{activity}}",
 						"6214fe9a344514b33f7bc34b",
-						"621527438042bba180f2a4be"
+						"621571cde7f384a1073c62f3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{user}}/621571a7e7f384a1073c62f1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{user}}",
+						"621571a7e7f384a1073c62f1"
 					]
 				}
 			},

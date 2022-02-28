@@ -10,8 +10,8 @@ const {
   logger
 } = require('./../shared/middlewares')
 
-const { VALIDATORS } = require('./../shared/enums')
 const USER_PARAMS = require('./../user/user.enum')
+const VALIDATORS = require('../shared/enums/validators.enum')
 const router = Router()
 const authController = new AuthController()
 
@@ -22,7 +22,7 @@ router.post('/register', [
   check(USER_PARAMS.EMAIL, VALIDATORS.INVALID).isEmail(),
   check(USER_PARAMS.PASSWORD, VALIDATORS.LENGTH + '=8-50').isLength({ min: 8, max: 50 }),
   validParams
-], authController.createUser)
+], authController.singup)
 
 // Login de usuario
 router.post('/', [
@@ -30,7 +30,7 @@ router.post('/', [
   check(USER_PARAMS.EMAIL, VALIDATORS.CORRUPT).isEmail(),
   check(USER_PARAMS.PASSWORD, VALIDATORS.LENGTH + '=8-50').isLength({ min: 8, max: 50 }),
   validParams
-], authController.loginUser)
+], authController.signin)
 
 // Validar y revalidar token
 // TODO: validar que no esten vacios los campos

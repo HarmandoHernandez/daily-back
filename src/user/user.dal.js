@@ -11,10 +11,6 @@ class UserDAL {
     return await User.findById(id).populate('activities')
   }
 
-  /**
-   * @param {string} email
-   * @returns {Promise<User>}
-   */
   async getByEmail (email) {
     return await User.findOne({ email })
   }

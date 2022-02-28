@@ -8,9 +8,8 @@ const {
   validParams,
   logger
 } = require('../shared/middlewares')
-
-const { default: VALIDATORS } = require('../shared/enums/validators.enum')
-const { default: ACTIVITY_PARAMS } = require('./activity.enum')
+const ACTIVITY_PARAMS = require('./activity.enum')
+const VALIDATORS = require('../shared/enums/validators.enum')
 
 const router = Router()
 const activityController = new ActivityController()

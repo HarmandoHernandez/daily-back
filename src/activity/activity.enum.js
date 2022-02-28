@@ -9,4 +9,4 @@ const ACTIVITY_PARAMS = {
   USER: 'user'
 }
 
-export default ACTIVITY_PARAMS
+module.exports = ACTIVITY_PARAMS

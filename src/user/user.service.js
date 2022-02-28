@@ -2,10 +2,12 @@
 const bcrypt = require('bcryptjs')
 
 // Customs
-const { Error: CError, GeneralFormat } = require('../shared/models')
-const { VALIDATORS, STATUS } = require('../shared/enums')
 const USER_PARAMS = require('./user.enum')
 const UserDAL = require('./user.dal')
+const getAnErrorResponse = require('../shared/helpers/responses/error.response')
+const VALIDATORS = require('../shared/enums/validators.enum')
+const GeneralFormat = require('../shared/helpers/responses/general.format')
+const STATUS = require('../shared/enums/status.enum')
 // Instances
 const userDal = new UserDAL()
 
@@ -15,15 +17,13 @@ class UserService {
       const salt = bcrypt.genSaltSync()
       userData.password = bcrypt.hashSync(userData.password, salt)
 
-      const activityDb = await userDal.createOne(userData)
-      // TODO: Validar que no sea null
-      return new GeneralFormat(STATUS.SUCCESS, activityDb)
+      const userDb = await userDal.createOne(userData)
+      if (userDb === null) {
+        return getAnErrorResponse(VALIDATORS.CORRUPT, USER_PARAMS.USER)
+      }
+      return new GeneralFormat(STATUS.SUCCESS, userDb)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'USER:CREATE')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'USER:CREATE', error)
     }
   }
 
@@ -31,17 +31,11 @@ class UserService {
     try {
       const userDb = await userDal.getById(id)
       if (userDb === null) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          new CError(VALIDATORS.NOEXIST, USER_PARAMS.USER))
+        return getAnErrorResponse(VALIDATORS.NOEXIST, USER_PARAMS.USER)
       }
       return new GeneralFormat(STATUS.SUCCESS, userDb)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'USER:GET_BY_ID')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'USER:GETBYID', error)
     }
   }
 
@@ -49,17 +43,11 @@ class UserService {
     try {
       const userDb = await userDal.getByEmail(email)
       if (userDb === null) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          new CError(VALIDATORS.NOEXIST, USER_PARAMS.USER))
+        return getAnErrorResponse(VALIDATORS.NOEXIST, USER_PARAMS.USER)
       }
       return new GeneralFormat(STATUS.SUCCESS, userDb)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'USER:GET_BY_ID')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'USER:GETBYEMAIL', error)
     }
   }
 
@@ -69,11 +57,7 @@ class UserService {
       // TODO: Validar que no sea null
       return new GeneralFormat(STATUS.SUCCESS, userDb)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'USER:UPDATE')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'USER:INCLUDACTIVITY', error)
     }
   }
 
@@ -83,11 +67,7 @@ class UserService {
       // TODO: Validar que no sea null
       return new GeneralFormat(STATUS.SUCCESS, userDb)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'USER:UPDATE')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'USER:UPDATE', error)
     }
   }
 }
