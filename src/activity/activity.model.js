@@ -1,3 +1,5 @@
+// @ts-check
+
 // Definicion de esquemas
 const { Schema, model } = require('mongoose')
 

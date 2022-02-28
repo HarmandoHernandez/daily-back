@@ -1,4 +1,10 @@
 // @ts-check
+
+// TODO: ESTANDARIZAR RESPUESTAS:
+/**
+ * NO SEA POSIBLE OTRO TIPO DE RESCPUESTA SI NO ESTAN ESTANDARIZADAS EN UN UTIL
+ * HACER MODELO PARA SUCCESS Y ERROR
+ */
 const { generateJWT } = require('../shared/helpers/jwt.helper')
 const bcrypt = require('bcryptjs')
 const UserService = require('./../user/user.service')
@@ -35,7 +41,7 @@ class AuthService {
       ) {
         return new GeneralFormat(
           STATUS.ERROR,
-          new CError(VALIDATORS.EXIST, USER_PARAMS.USER))
+          [new CError(VALIDATORS.EXIST, USER_PARAMS.USER)])
       }
 
       const userData = { email, name, password }
@@ -77,7 +83,8 @@ class AuthService {
         // TODO: Simplificar usando el helpers/repinses.helper.js
         return new GeneralFormat(
           STATUS.ERROR,
-          new CError(VALIDATORS.INVALID, AUTH_PARAMS.PASSWORD)
+          // TODO: Al ser error, debe de enviar un arreglo con errores
+          [new CError(VALIDATORS.INVALID, AUTH_PARAMS.PASSWORD)]
         )
       }
       // @ts-ignore

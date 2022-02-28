@@ -1,5 +1,5 @@
-const { Usuario } = require('./models')
-
+// @ts-check
+/*
 const emailExiste = async (correo = '') => {
   // Verificar si el correo existe
   const existeEmail = await Usuario.findOne({ correo })
@@ -20,3 +20,4 @@ module.exports = {
   emailExiste,
   isOwner
 }
+ */

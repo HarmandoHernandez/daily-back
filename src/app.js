@@ -1,3 +1,4 @@
+// @ts-check
 require('dotenv').config()
 const Server = require('./app.server')
 const Route = require('./shared/models/route.model')

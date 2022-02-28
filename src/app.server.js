@@ -1,3 +1,4 @@
+// @ts-check
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
@@ -20,8 +21,6 @@ class Server {
   middlewares () {
     this.app.use(cors())
     this.app.use(express.json())
-    // Public directory with statics
-    this.app.use(express.static('public'))
     // Routes
     this.router.forEach(route => {
       this.app.use(route.path, route.routes)
@@ -34,8 +33,10 @@ class Server {
     })
   }
 
-  // Acces to frontend routes without #
   publicView () {
+    // Public directory with statics
+    this.app.use(express.static('public'))
+    // Acces to frontend routes without #
     this.app.get('*', (_, res) => {
       res.sendFile(path.resolve(__dirname, './../public/index.html'))
     })

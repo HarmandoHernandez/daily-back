@@ -1,3 +1,4 @@
+// @ts-check
 class UserC {
   /**
      * Model of User

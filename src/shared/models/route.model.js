@@ -1,3 +1,4 @@
+// @ts-check
 class Route {
   constructor (path, routes) {
     this.path = path

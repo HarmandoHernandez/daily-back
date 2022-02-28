@@ -1,3 +1,5 @@
+// @ts-check
+
 const VALIDATORS = {
   REQUIRED: 'REQUIRED',
   FORMAT: 'FORMAT',
@@ -12,4 +14,4 @@ const VALIDATORS = {
   NOEXIST: 'NOEXIST'
 }
 
-module.exports = VALIDATORS
+export default VALIDATORS

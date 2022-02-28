@@ -1,3 +1,4 @@
+// @ts-check
 const ACTIVITY_PARAMS = {
   ACTIVITY: 'activity',
   ID: 'id',
@@ -8,4 +9,4 @@ const ACTIVITY_PARAMS = {
   USER: 'user'
 }
 
-module.exports = ACTIVITY_PARAMS
+export default ACTIVITY_PARAMS

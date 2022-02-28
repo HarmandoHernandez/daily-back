@@ -1,3 +1,5 @@
+// @ts-check
+
 const { Router } = require('express')
 const { check } = require('express-validator')
 const ActivityController = require('./activity.controller')
@@ -7,8 +9,8 @@ const {
   logger
 } = require('../shared/middlewares')
 
-const { VALIDATORS } = require('../shared/enums')
-const ACTIVITY_PARAMS = require('./activity.enum')
+const { default: VALIDATORS } = require('../shared/enums/validators.enum')
+const { default: ACTIVITY_PARAMS } = require('./activity.enum')
 
 const router = Router()
 const activityController = new ActivityController()

@@ -1,3 +1,4 @@
+// @ts-check
 const USER_PARAMS = {
   USER: 'user',
   ID: 'id',

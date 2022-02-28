@@ -1,3 +1,4 @@
+// @ts-check
 // eslint-disable-next-line no-unused-vars
 const { response, request } = require('express')
 // Customs

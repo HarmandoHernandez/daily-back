@@ -1,3 +1,5 @@
+// @ts-check
+
 const jwt = require('jsonwebtoken')
 
 const generateJWT = (uid = '', name = 'No name') => {

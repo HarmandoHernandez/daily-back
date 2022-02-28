@@ -1,7 +1,9 @@
+// @ts-check
+
 // eslint-disable-next-line no-unused-vars
 const { response, request } = require('express')
+const { default: STATUS } = require('../shared/enums/status.enum')
 
-const STATUS = require('../shared/enums/status.enum')
 const ActivityC = require('./activity')
 const ActivityService = require('./activity.service')
 

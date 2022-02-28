@@ -1,6 +1,8 @@
+// @ts-check
+
 const STATUS = {
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS'
 }
 
-module.exports = STATUS
+export default STATUS

@@ -1,3 +1,4 @@
+// @ts-check
 class ActivityC {
   /**
      * Model of Activity

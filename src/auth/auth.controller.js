@@ -1,3 +1,5 @@
+// @ts-check
+
 const { response } = require('express')
 const { responseError, responseSuccess } = require('../shared/helpers/responses.helper')
 

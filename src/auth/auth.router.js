@@ -1,3 +1,5 @@
+// @ts-check
+
 const { Router } = require('express')
 const { check } = require('express-validator')
 const AuthController = require('./auth.controller')

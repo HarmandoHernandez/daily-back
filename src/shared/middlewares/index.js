@@ -1,3 +1,4 @@
+// @ts-check
 const validParams = require('./valid-params.mw')
 const validJWT = require('./valid-jwt.mw')
 const logger = require('./logger.mw')

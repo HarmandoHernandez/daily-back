@@ -4,24 +4,22 @@ const UserService = require('./../user/user.service')
 // eslint-disable-next-line no-unused-vars
 const ActivityC = require('./activity')
 
-const {
-  Error: CError,
-  GeneralFormat
-} = require('../shared/models')
-
-const { VALIDATORS, STATUS } = require('../shared/enums')
-const ACTIVITY_PARAMS = require('./activity.enum')
-
 const activityDAL = new ActivityDAL()
+
+const getErrorResponse = require('./../shared/helpers/responses/error.response')
+const { default: ErrorFormat } = require('../shared/helpers/responses/error.format')
+const { default: VALIDATORS } = require('../shared/enums/validators.enum')
+const { default: ACTIVITY_PARAMS } = require('./activity.enum')
+const { default: STATUS } = require('../shared/enums/status.enum')
 
 class ActivityService {
   async getOneById (id) {
     try {
       const activityDb = await activityDAL.getOneById(id)
       if (activityDb === null) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          new CError(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY))
+        const errors = [new ErrorFormat(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)]
+        const response = getErrorResponse(errors, STATUS.ERROR)
+        return response
       }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {

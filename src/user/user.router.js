@@ -1,10 +1,11 @@
+// @ts-check
 const { Router } = require('express')
 const { check } = require('express-validator')
 // Customs
 const { validParams, logger } = require('../shared/middlewares')
-const { VALIDATORS } = require('../shared/enums')
 const USER_PARAMS = require('./user.enum')
 const UserController = require('./user.controller')
+const { default: VALIDATORS } = require('../shared/enums/validators.enum')
 // Instances
 const router = Router()
 const userController = new UserController()
