@@ -56,9 +56,9 @@ class UserService {
     }
   }
 
-  async includActivity (userId, activityId) {
+  async includeActivity (userId, activityId) {
     try {
-      const userDb = await userDal.includActivity(userId, activityId)
+      const userDb = await userDal.includeActivity(userId, activityId)
       // TODO: Validar que no sea null
       return new GeneralFormat(STATUS.SUCCESS, userDb)
     } catch (error) {

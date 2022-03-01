@@ -45,7 +45,7 @@ class ActivityService {
 
       // Include Activity identificator to owner User
       const userService = new UserService()
-      await userService.includActivity(activityData.user, activityDb._id)
+      await userService.includeActivity(activityData.user, activityDb._id)
 
       // Response
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
