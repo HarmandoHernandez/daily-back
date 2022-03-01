@@ -14,7 +14,7 @@ const VALIDATORS = require('../shared/enums/validators.enum')
 const router = Router()
 const activityController = new ActivityController()
 
-router.post('/:user', [
+router.post(`/:${ACTIVITY_PARAMS.USER}`, [
   logger,
   check(ACTIVITY_PARAMS.USER, VALIDATORS.CORRUPT).isMongoId(),
   check(ACTIVITY_PARAMS.ICON, VALIDATORS.REQUIRED).not().isEmpty(),
@@ -24,14 +24,14 @@ router.post('/:user', [
   validParams
 ], activityController.createOne)
 
-router.get('/:user/:id', [
+router.get(`/:${ACTIVITY_PARAMS.USER}/:${ACTIVITY_PARAMS.ID}`, [
   logger,
   check(ACTIVITY_PARAMS.USER, VALIDATORS.CORRUPT).isMongoId(),
   check(ACTIVITY_PARAMS.ID, VALIDATORS.CORRUPT).isMongoId(),
   validParams
 ], activityController.getOneById)
 
-router.patch('/:user/:id', [
+router.patch(`/:${ACTIVITY_PARAMS.USER}/:${ACTIVITY_PARAMS.ID}`, [
   logger,
   check(ACTIVITY_PARAMS.USER, VALIDATORS.CORRUPT).isMongoId(),
   check(ACTIVITY_PARAMS.ID, VALIDATORS.CORRUPT).isMongoId(),
@@ -43,7 +43,7 @@ router.patch('/:user/:id', [
   validParams
 ], activityController.updateOne)
 
-router.delete('/:user/:id', [
+router.delete(`/:${ACTIVITY_PARAMS.USER}/:${ACTIVITY_PARAMS.ID}`, [
   logger,
   check(ACTIVITY_PARAMS.USER, VALIDATORS.CORRUPT).isMongoId(),
   check(ACTIVITY_PARAMS.ID, VALIDATORS.CORRUPT).isMongoId(),

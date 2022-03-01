@@ -11,7 +11,7 @@ const router = Router()
 const userController = new UserController()
 
 // Routes
-router.get('/:id', [
+router.get(`/:${USER_PARAMS.ID}`, [
   logger,
   check(USER_PARAMS.ID, VALIDATORS.CORRUPT).isMongoId(),
   validParams

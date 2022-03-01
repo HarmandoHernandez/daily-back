@@ -5,12 +5,8 @@ const { request, response } = require('express')
 
 /**
  * Register API request
- * @param {request} req API Request
- * @param {response} _ API Response
- * @param {any} next
- * @returns any
  */
-const logger = (req, _, next) => {
+const logger = (req = request, _, next) => {
   const log = `_> ${req.originalUrl} | ${req.method} | ${JSON.stringify(req.body)}`
   console.error(log)
   next()

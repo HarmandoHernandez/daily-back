@@ -10,17 +10,14 @@ const GeneralFormat = require('../helpers/responses/general.format')
 
 /**
  * Evaluate the request result with express validator
- * @param {request} req API Request
- * @param {response} res API Response
- * @param {any} next
- * @returns any
  */
-const validParams = (req, res, next) => {
+const validParams = (req = request, res = response, next) => {
   const validtionResults = validationResult(req)
   // Get errors
   const errors = validtionResults.array().map(e => new ErrorFormat(e.msg, e.param))
   if (errors.length > 0) {
     console.error(errors)
+    // Response
     const errorRespose = new GeneralFormat(STATUS.ERROR, errors)
     return res.status(STATUS_CODES.PARTIAL_CONTENT).json(errorRespose)
   }
