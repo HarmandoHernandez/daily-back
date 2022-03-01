@@ -9,6 +9,7 @@ const ErrorFormat = require('./error.format')
 // eslint-disable-next-line no-unused-vars
 const UserClass = require('./user.format')
 
+// TODO: Hacer en formato <T>
 class GeneralFormat {
   /**
    * General format by API response

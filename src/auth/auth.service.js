@@ -16,12 +16,12 @@ const VALIDATORS = require('../shared/enums/validators.enum')
 
 const getAnErrorResponse = require('../shared/helpers/responses/error.response')
 const getAuthResponse = require('../shared/helpers/responses/auth.response')
+const UserFormat = require('../shared/helpers/responses/user.format')
 
 // Instances
 const userService = new UserService()
 
 class AuthService {
-  // TODO: Definir modelo diferente al Schema
   /**
    * Register new acount in app
    * @param {string} email User email
@@ -33,27 +33,34 @@ class AuthService {
     try {
       // Check non-duplicate user in DB
       const userResp = await userService.getOneByEmail(email)
-      if (
+
+      if (userResp.status === STATUS.SUCCESS) {
+        return getAnErrorResponse(VALIDATORS.EXIST, USER_PARAMS.USER)
+      }
+      /* if (
         userResp.status !== STATUS.ERROR &&
         userResp.message.error !== VALIDATORS.NOEXIST
       ) {
         return getAnErrorResponse(VALIDATORS.EXIST, USER_PARAMS.USER)
-      }
+      } */
+
       // Create user in DB
-      const userData = { email, name, password }
+      const userData = new UserFormat(name, email, password, [])
       const userCreated = await userService.createUser(userData)
       if (userCreated.status !== STATUS.SUCCESS) return userCreated
 
+      /** @type {UserFormat} */
+      // @ts-ignore
       const user = userResp.message
 
       // Get token
-      const tokenResp = await this.getNewToken(user._id, user.name)
+      const tokenResp = await this.getNewToken(user.id, user.name)
       if (tokenResp.status !== STATUS.SUCCESS) return tokenResp
       // @ts-ignore
       const token = tokenResp.message.token
 
       // Response
-      return getAuthResponse({ uid: user._id, name: user.name, token })
+      return getAuthResponse({ id: user.id, name: user.name, token })
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'SIGNUP', error)
     }
@@ -71,23 +78,23 @@ class AuthService {
       const userResp = await userService.getOneByEmail(email)
       if (userResp.status === STATUS.ERROR) return userResp
 
-      const { _id: uid, name, password: pwd } = userResp.message
+      // @ts-ignore
+      const { id, name, password: pwd } = userResp.message
 
       // Comparate Passwords
-      // @ts-ignore
       const validPassword = bcrypt.compareSync(password, pwd)
       if (!validPassword) {
         return getAnErrorResponse(VALIDATORS.INVALID, AUTH_PARAMS.PASSWORD)
       }
 
       // Get token
-      const tokenResp = await this.getNewToken(uid, name)
+      const tokenResp = await this.getNewToken(id, name)
       if (tokenResp.status !== STATUS.SUCCESS) return tokenResp
       // @ts-ignore
       const token = tokenResp.message.token
 
       // Response
-      return getAuthResponse({ uid, name, token })
+      return getAuthResponse({ id, name, token })
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'SIGNIN', error)
     }
@@ -95,18 +102,18 @@ class AuthService {
 
   /**
    * Refresh token or generate new token of an user
-   * @param {ObjectId} uid User identification
+   * @param {ObjectId} id User identification
    * @param {string} name User name
    * @returns New token
    */
-  async getNewToken (uid, name) {
+  async getNewToken (id, name) {
     try {
-      const token = await generateJWT(uid, name)
+      const token = await generateJWT(id, name)
       if (token.length === 0) {
         return getAnErrorResponse(VALIDATORS.FATAL_ERROR, AUTH_PARAMS.TOKEN)
       }
       // Response
-      return getAuthResponse({ uid, name, token })
+      return getAuthResponse({ id, name, token })
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'NEWTOKEN', error)
     }
