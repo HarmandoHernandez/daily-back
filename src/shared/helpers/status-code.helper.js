@@ -16,6 +16,9 @@ const getStatusCode = (status) => {
     case VALIDATORS.FATAL_ERROR:
       statusCode = STATUS_CODES.INTERNAL_SERVER_ERROR
       break
+    case VALIDATORS.INCORRECT:
+      statusCode = STATUS_CODES.NOT_ACCEPTABLE
+      break
   }
 
   return statusCode

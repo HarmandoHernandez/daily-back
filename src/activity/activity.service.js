@@ -47,7 +47,7 @@ class ActivityService {
 
       // Include Activity identificator to owner User
       const userService = new UserService()
-      const activityIncluded = await userService.includeActivity(activityData.user.toString(), activityDb.id.toString())
+      const activityIncluded = await userService.includeActivity(activityData.user, activityDb.id)
 
       if (activityIncluded.status === STATUS.ERROR) {
         return activityIncluded
@@ -91,7 +91,7 @@ class ActivityService {
 
       // Delete Activity identificator of owner user
       const userService = new UserService()
-      const activityIncluded = await userService.removeActivity(activityDb.user.toString(), activityDb.id.toString())
+      const activityIncluded = await userService.removeActivity(activityDb.user, activityDb.id)
 
       if (activityIncluded.status === STATUS.ERROR) {
         return activityIncluded
