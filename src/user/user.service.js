@@ -27,13 +27,18 @@ class UserService {
     }
   }
 
+  /**
+   * Logic and format to Get User by id
+   * @param {string} id User identification
+   * @returns {Promise<GeneralFormat>} Response format
+   */
   async getOneById (id) {
     try {
-      const userDb = await userDal.getById(id)
-      if (userDb === null) {
-        return getAnErrorResponse(VALIDATORS.NOEXIST, USER_PARAMS.USER)
+      const user = await userDal.getById(id)
+      if (user !== null) {
+        return new GeneralFormat(STATUS.SUCCESS, user)
       }
-      return new GeneralFormat(STATUS.SUCCESS, userDb)
+      return getAnErrorResponse(VALIDATORS.NOEXIST, USER_PARAMS.USER)
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'USER:GETBYID', error)
     }

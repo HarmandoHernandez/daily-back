@@ -1,14 +1,26 @@
 // @ts-check
 const User = require('./user.model')
 
+const UserFormat = require('../shared/helpers/responses/user.format')
+
 class UserDAL {
   async createOne (userData) {
     const newUser = new User(userData)
     return await newUser.save()
   }
 
-  async getById (id) {
-    return await User.findById(id).populate('activities')
+  /**
+   * Get user from db
+   * @param {string} idUser User identification
+   * @returns {Promise<UserFormat>} User data
+   */
+  async getById (idUser) {
+    const resp = await User.findById(idUser).populate('activities')
+    if (resp !== null) {
+      const { name, email, password, activities, id } = resp.toJSON()
+      return new UserFormat(name, email, password, activities, id)
+    }
+    return null
   }
 
   async getByEmail (email) {

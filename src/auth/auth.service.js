@@ -1,6 +1,6 @@
 // @ts-check
 
-const { generateJWT } = require('../shared/helpers/jwt.helper')
+const generateJWT = require('../shared/helpers/jwt.helper')
 const bcrypt = require('bcryptjs')
 // eslint-disable-next-line no-unused-vars
 const { ObjectId } = require('mongoose')

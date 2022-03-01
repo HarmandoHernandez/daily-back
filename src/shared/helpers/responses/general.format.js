@@ -6,12 +6,14 @@ const ActivityFormat = require('./activity.format')
 const AuthFormat = require('./auth.format')
 // eslint-disable-next-line no-unused-vars
 const ErrorFormat = require('./error.format')
+// eslint-disable-next-line no-unused-vars
+const UserClass = require('./user.format')
 
 class GeneralFormat {
   /**
    * General format by API response
    * @param {string} status Custom status of execution
-   * @param {AuthFormat | ActivityFormat | ActivityFormat[] | ErrorFormat[]} message Data solved and details of petition
+   * @param {UserClass | AuthFormat | ActivityFormat | ActivityFormat[] | ErrorFormat[]} message Data solved and details of petition
    */
   constructor (status, message) {
     this.status = status
