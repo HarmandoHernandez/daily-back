@@ -2,8 +2,10 @@
 
 // eslint-disable-next-line no-unused-vars
 const { response, request } = require('express')
+const STATUS_CODES = require('../shared/enums/status-codes.enums')
 
 const STATUS = require('../shared/enums/status.enum')
+const getStatusCode = require('../shared/helpers/status-code.helper')
 const AuthService = require('./auth.service')
 
 const authService = new AuthService()
@@ -15,11 +17,14 @@ class AuthController {
    */
   async singup (req = request, res = response) {
     const { email, name, password } = req.body
-    const signupResp = await authService.singup(email, name, password)
-    if (signupResp.status === STATUS.SUCCESS) {
-      return res.status(200).json(signupResp)
+    const response = await authService.singup(email, name, password)
+
+    if (response.status === STATUS.SUCCESS) {
+      return res.status(STATUS_CODES.OK).json(response)
     }
-    return res.status(400).json(signupResp)
+    // STATUS: ERROR
+    const status = getStatusCode(response.message[0].error)
+    return res.status(status).json(response)
   }
 
   /**
@@ -27,11 +32,14 @@ class AuthController {
    */
   async signin (req = request, res = response) {
     const { email, password } = req.body
-    const signinResp = await authService.signin(email, password)
-    if (signinResp.status === STATUS.SUCCESS) {
-      return res.status(200).json(signinResp)
+    const response = await authService.signin(email, password)
+
+    if (response.status === STATUS.SUCCESS) {
+      return res.status(STATUS_CODES.OK).json(response)
     }
-    return res.status(400).json(signinResp)
+    // STATUS: ERROR
+    const status = getStatusCode(response.message[0].error)
+    return res.status(status).json(response)
   }
 
   /**
@@ -40,11 +48,14 @@ class AuthController {
   async refreshToken (req = request, res = response) {
     // @ts-ignore
     const { uid, name } = req
-    const tokenResp = await authService.getNewToken(uid, name)
-    if (tokenResp.status === STATUS.SUCCESS) {
-      return res.status(200).json(tokenResp)
+    const response = await authService.getNewToken(uid, name)
+
+    if (response.status === STATUS.SUCCESS) {
+      return res.status(STATUS_CODES.OK).json(response)
     }
-    return res.status(400).json(tokenResp)
+    // STATUS: ERROR
+    const status = getStatusCode(response.message[0].error)
+    return res.status(status).json(response)
   }
 }
 
