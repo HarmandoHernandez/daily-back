@@ -18,7 +18,7 @@ class UserService {
   /**
    * Logic and format to create new User
    * @param {UserFormat} userData User data
-   * @returns {Promise<GeneralFormat>} Response format
+   * @returns {Promise<GeneralFormat>} Response formatted
    */
   async createUser (userData) {
     try {
@@ -39,7 +39,7 @@ class UserService {
   /**
    * Logic and format to Get User by id
    * @param {string} id User identification
-   * @returns {Promise<GeneralFormat>} Response format
+   * @returns {Promise<GeneralFormat>} Response formatted
    */
   async getOneById (id) {
     try {
@@ -56,7 +56,7 @@ class UserService {
   /**
    * Logic and format to Get User by email
    * @param {string} email User email
-   * @returns {Promise<GeneralFormat>} Response format
+   * @returns {Promise<GeneralFormat>} Response formatted
    */
   async getOneByEmail (email) {
     try {
@@ -74,7 +74,7 @@ class UserService {
    * Logic to include activity reference in user
    * @param {string} userId User identification
    * @param {string} activityId Activity identification
-   * @returns {Promise<GeneralFormat>} Response format
+   * @returns {Promise<GeneralFormat>} Response formatted
    */
   async includeActivity (userId, activityId) {
     try {
@@ -92,7 +92,7 @@ class UserService {
    * Logic to remove activity reference from user
    * @param {string} userId User identification
    * @param {string} activityId Activity identification
-   * @returns {Promise<GeneralFormat>} Response format
+   * @returns {Promise<GeneralFormat>} Response formatted
    */
   async removeActivity (userId, activityId) {
     try {

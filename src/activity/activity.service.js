@@ -7,34 +7,36 @@ const STATUS = require('../shared/enums/status.enum')
 const ACTIVITY_PARAMS = require('./activity.enum')
 // eslint-disable-next-line no-unused-vars
 const GeneralFormat = require('../shared/helpers/responses/general.format')
+// eslint-disable-next-line no-unused-vars
+const ActivityFormat = require('../shared/helpers/responses/activity.format')
 const getAnErrorResponse = require('../shared/helpers/responses/error.response')
 
 // Instances
 const activityDAL = new ActivityDAL()
 
 class ActivityService {
+  /**
+   * Logic and format to get Activity by id
+   * @param {string} id Activity identification
+   * @returns {Promise<GeneralFormat>} Response format
+   */
   async getOneById (id) {
     try {
       const activityDb = await activityDAL.getOneById(id)
-      if (activityDb === null) {
-        return getAnErrorResponse(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)
+      if (activityDb !== null) {
+        return new GeneralFormat(STATUS.SUCCESS, activityDb)
       }
-
-      // Response
-      /* const authData = new ActivityFormat(
-        activityDb._id,
-        activityDb.icon,
-        activityDb.title,
-        activityDb.startTime,
-        activityDb.durationTime,
-        activityDb.user
-      ) */
-      return new GeneralFormat(STATUS.SUCCESS, activityDb)
+      return getAnErrorResponse(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:GETBYID', error)
     }
   }
 
+  /**
+   * Logic and format to create new Activity
+   * @param {ActivityFormat} activityData Activity data
+   * @returns {Promise<GeneralFormat>} Response formatted
+   */
   async createOne (activityData) {
     try {
       // Create activity
@@ -45,29 +47,40 @@ class ActivityService {
 
       // Include Activity identificator to owner User
       const userService = new UserService()
-      await userService.includeActivity(activityData.user, activityDb._id)
+      const activityIncluded = await userService.includeActivity(activityData.user.toString(), activityDb.id.toString())
 
-      // Response
+      if (activityIncluded.status === STATUS.ERROR) {
+        return activityIncluded
+      }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:CREATE', error)
     }
   }
 
+  /**
+   * Logic and format to update Activity
+   * @param {ActivityFormat} activityData Activity data
+   * @returns {Promise<GeneralFormat>} Response formatted
+   */
   async updateOne (activityData) {
     try {
       // Update activity
       const activityDb = await activityDAL.updateOne(activityData)
-      if (activityDb === null) {
-        return getAnErrorResponse(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)
+      if (activityDb !== null) {
+        return new GeneralFormat(STATUS.SUCCESS, activityDb)
       }
-      // Response
-      return new GeneralFormat(STATUS.SUCCESS, activityDb)
+      return getAnErrorResponse(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:UPDATE', error)
     }
   }
 
+  /**
+   * Logic to delete an Activity
+   * @param {string} id Activity identification
+   * @returns {Promise<GeneralFormat>} Response formatted
+   */
   async deleteOne (id) {
     try {
       // Delete activity
@@ -78,9 +91,11 @@ class ActivityService {
 
       // Delete Activity identificator of owner user
       const userService = new UserService()
-      await userService.removeActivity(activityDb.user, activityDb._id)
+      const activityIncluded = await userService.removeActivity(activityDb.user.toString(), activityDb.id.toString())
 
-      // Response
+      if (activityIncluded.status === STATUS.ERROR) {
+        return activityIncluded
+      }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:DELETE', error)
