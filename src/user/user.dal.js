@@ -67,7 +67,7 @@ class UserDAL {
   }
 
   /**
-   * Build a uer with the standart format
+   * Build a user with the standart format
    * @param {any} userData User data
    * @returns {UserFormat} User formatted
    */
