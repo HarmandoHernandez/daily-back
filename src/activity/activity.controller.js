@@ -15,7 +15,8 @@ class ActivityController {
      * Create one activity of an User
      */
   async createOne (req = request, res = response) {
-    const { user } = req.params
+    // @ts-ignore
+    const { uid: user } = req
     const { icon, title, startTime, durationTime } = req.body
     const activityData = new ActivityFormat(icon, title, startTime, durationTime, user)
     // Guardar DB

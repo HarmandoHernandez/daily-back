@@ -32,6 +32,7 @@ const validJWT = async (req, res, next) => {
     // @ts-ignore
     const { uid, name } = jwt.verify(token, process.env.SECRET_JWT_SEED)
     // Consultar user in BD
+    // TODO: Getbyid with pupulate and other without
     const userResp = await userService.getOneById(uid)
 
     if (userResp.status === STATUS.ERROR) {

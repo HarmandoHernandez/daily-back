@@ -6,7 +6,8 @@ const ActivityController = require('./activity.controller')
 
 const {
   validParams,
-  logger
+  logger,
+  validJWT
 } = require('../shared/middlewares')
 const ACTIVITY_PARAMS = require('./activity.enum')
 const VALIDATORS = require('../shared/enums/validators.enum')
@@ -14,9 +15,9 @@ const VALIDATORS = require('../shared/enums/validators.enum')
 const router = Router()
 const activityController = new ActivityController()
 
-router.post(`/:${ACTIVITY_PARAMS.USER}`, [
+router.post('/', [
   logger,
-  check(ACTIVITY_PARAMS.USER, VALIDATORS.CORRUPT).isMongoId(),
+  validJWT,
   check(ACTIVITY_PARAMS.ICON, VALIDATORS.REQUIRED).not().isEmpty(),
   check(ACTIVITY_PARAMS.TITLE, VALIDATORS.REQUIRED).not().isEmpty(),
   check(ACTIVITY_PARAMS.START_TIME, VALIDATORS.REQUIRED).not().isEmpty(), // TODO: Validar formato: "XX:XX"
