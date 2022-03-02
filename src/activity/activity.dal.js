@@ -31,7 +31,8 @@ class ActivityDAL {
    * @returns {Promise<ActivityFormat>} Activity data
    */
   async updateOne (activityData) {
-    return await Activity.findByIdAndUpdate(activityData.id, activityData, { new: true })
+    const resp = await Activity.findByIdAndUpdate(activityData.id, activityData, { new: true })
+    return this.getActivity(resp)
   }
 
   /**
@@ -40,7 +41,8 @@ class ActivityDAL {
    * @returns {Promise<ActivityFormat>} Activity data
    */
   async deleteOne (id) {
-    return await Activity.findByIdAndDelete(id)
+    const resp = await Activity.findByIdAndDelete(id)
+    return this.getActivity(resp)
   }
 
   /**
