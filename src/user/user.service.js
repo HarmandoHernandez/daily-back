@@ -45,6 +45,8 @@ class UserService {
     try {
       const user = await userDal.getById(id)
       if (user !== null) {
+        // Delete password
+        delete user.password
         return new GeneralFormat(STATUS.SUCCESS, user)
       }
       return getAnErrorResponse(VALIDATORS.NOEXIST, USER_PARAMS.USER)
