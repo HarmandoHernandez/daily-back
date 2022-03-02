@@ -33,7 +33,6 @@ class AuthController {
   async signin (req = request, res = response) {
     const { email, password } = req.body
     const response = await authService.signin(email, password)
-
     if (response.status === STATUS.SUCCESS) {
       return res.status(STATUS_CODES.OK).json(response)
     }

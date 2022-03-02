@@ -32,7 +32,6 @@ class AuthService {
     try {
       // Check non-duplicate user in DB
       const userResp = await userService.getOneByEmail(email)
-
       if (userResp.status === STATUS.SUCCESS) {
         return getAnErrorResponse(VALIDATORS.EXIST, USER_PARAMS.USER)
       }
@@ -41,6 +40,7 @@ class AuthService {
       const userData = new UserFormat(name, email, password, [])
 
       const userCreated = await userService.createUser(userData)
+
       if (userCreated.status !== STATUS.SUCCESS) return userCreated
 
       /** @type {UserFormat} */
@@ -76,11 +76,10 @@ class AuthService {
 
       // @ts-ignore
       const { id, name, password: pwd } = userResp.message
-
       // Comparate Passwords
       const validPassword = bcrypt.compareSync(password, pwd)
       if (!validPassword) {
-        return getAnErrorResponse(VALIDATORS.INVALID, AUTH_PARAMS.PASSWORD)
+        return getAnErrorResponse(VALIDATORS.INVALID, USER_PARAMS.PASSWORD)
       }
 
       // Get token
