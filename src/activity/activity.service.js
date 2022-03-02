@@ -101,6 +101,19 @@ class ActivityService {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:DELETE', error)
     }
   }
+
+  /**
+   * Logic and format to get Activity Owner
+   * @param {string} id Activity identification
+   * @returns {Promise<import('mongoose').ObjectId>} Response format
+   */
+  async getActivityOwner (id) {
+    try {
+      return await activityDAL.getActivityOwner(id)
+    } catch (error) {
+      return null
+    }
+  }
 }
 
 module.exports = ActivityService

@@ -49,7 +49,10 @@ class ActivityController {
      * Update one activity of an User
      */
   async updateOne (req = request, res = response) {
-    const { user, id } = req.params
+    console.log('here')
+    // @ts-ignore
+    const { user } = req
+    const { id } = req.params
     const { icon, title, startTime, durationTime } = req.body
     const activityData = new ActivityFormat(icon, title, startTime, durationTime, user, id)
     // Guardar DB

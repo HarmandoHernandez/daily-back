@@ -46,6 +46,17 @@ class ActivityDAL {
   }
 
   /**
+   * Get Activity owner
+   * @param {string} id Activity identification
+   * @returns {Promise<import('mongoose').ObjectId>} User data
+   */
+  async getActivityOwner (id) {
+    const resp = await Activity.findById(id)
+    console.log(resp)
+    return resp.user
+  }
+
+  /**
    * Build an Activity with the standart format
    * @param {any} activityData Activity data
    * @returns {ActivityFormat} Activity formatted
