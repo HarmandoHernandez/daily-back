@@ -19,6 +19,7 @@ class ActivityDAL {
    * @returns {Promise<ActivityFormat>} Activity data
    */
   async createOne (activityData) {
+    console.log(activityData)
     const newActivity = new Activity(activityData)
     const resp = await newActivity.save()
     return this.getActivity(resp)

@@ -15,9 +15,9 @@ class ActivityController {
      * Create one activity of an User
      */
   async createOne (req = request, res = response) {
-    // const { user } = req.params
+    const { user } = req.params
     const { icon, title, startTime, durationTime } = req.body
-    const activityData = new ActivityFormat(icon, title, startTime, durationTime)
+    const activityData = new ActivityFormat(icon, title, startTime, durationTime, user)
     // Guardar DB
     const response = await activityService.createOne(activityData)
 
@@ -48,8 +48,8 @@ class ActivityController {
      * Update one activity of an User
      */
   async updateOne (req = request, res = response) {
-    const { id } = req.params
-    const { icon, title, startTime, durationTime, user } = req.body
+    const { user, id } = req.params
+    const { icon, title, startTime, durationTime } = req.body
     const activityData = new ActivityFormat(icon, title, startTime, durationTime, user, id)
     // Guardar DB
     const response = await activityService.updateOne(activityData)
