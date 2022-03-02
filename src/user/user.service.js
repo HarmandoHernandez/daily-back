@@ -27,7 +27,9 @@ class UserService {
       userData.password = bcrypt.hashSync(userData.password, salt)
       // Save user
       const userDb = await userDal.createOne(userData)
+      console.log('-> ', userDb)
       if (userDb !== null) {
+        delete userDb.password
         return new GeneralFormat(STATUS.SUCCESS, userDb)
       }
       return getAnErrorResponse(VALIDATORS.CORRUPT, USER_PARAMS.USER)

@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs')
 // eslint-disable-next-line no-unused-vars
 const { ObjectId } = require('mongoose')
 
-// eslint-disable-next-line no-unused-vars
 const GeneralFormat = require('../shared/helpers/responses/general.format')
 const UserService = require('./../user/user.service')
 
@@ -15,8 +14,8 @@ const STATUS = require('../shared/enums/status.enum')
 const VALIDATORS = require('../shared/enums/validators.enum')
 
 const getAnErrorResponse = require('../shared/helpers/responses/error.response')
-const getAuthResponse = require('../shared/helpers/responses/auth.response')
 const UserFormat = require('../shared/helpers/responses/user.format')
+const AuthFormat = require('../shared/helpers/responses/auth.format')
 
 // Instances
 const userService = new UserService()
@@ -37,21 +36,16 @@ class AuthService {
       if (userResp.status === STATUS.SUCCESS) {
         return getAnErrorResponse(VALIDATORS.EXIST, USER_PARAMS.USER)
       }
-      /* if (
-        userResp.status !== STATUS.ERROR &&
-        userResp.message.error !== VALIDATORS.NOEXIST
-      ) {
-        return getAnErrorResponse(VALIDATORS.EXIST, USER_PARAMS.USER)
-      } */
 
       // Create user in DB
       const userData = new UserFormat(name, email, password, [])
+
       const userCreated = await userService.createUser(userData)
       if (userCreated.status !== STATUS.SUCCESS) return userCreated
 
       /** @type {UserFormat} */
       // @ts-ignore
-      const user = userResp.message
+      const user = userCreated.message
 
       // Get token
       const tokenResp = await this.getNewToken(user.id, user.name)
@@ -60,7 +54,9 @@ class AuthService {
       const token = tokenResp.message.token
 
       // Response
-      return getAuthResponse({ id: user.id, name: user.name, token })
+      const auth = new AuthFormat(user.id, user.name, token)
+      return new GeneralFormat(STATUS.SUCCESS, auth)
+      // return getAuthResponse({ id: , name:  })
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'SIGNUP', error)
     }
@@ -94,7 +90,8 @@ class AuthService {
       const token = tokenResp.message.token
 
       // Response
-      return getAuthResponse({ id, name, token })
+      const auth = new AuthFormat(id, name, token)
+      return new GeneralFormat(STATUS.SUCCESS, auth)
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'SIGNIN', error)
     }
@@ -113,7 +110,8 @@ class AuthService {
         return getAnErrorResponse(VALIDATORS.FATAL_ERROR, AUTH_PARAMS.TOKEN)
       }
       // Response
-      return getAuthResponse({ id, name, token })
+      const auth = new AuthFormat(id, name, token)
+      return new GeneralFormat(STATUS.SUCCESS, auth)
     } catch (error) {
       return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'NEWTOKEN', error)
     }
