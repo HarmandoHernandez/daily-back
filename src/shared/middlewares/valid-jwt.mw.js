@@ -5,11 +5,11 @@ const jwt = require('jsonwebtoken')
 
 // Custom
 const UserService = require('./../../user/user.service')
-const USER_PARAMS = require('../../user/user.enum')
 const AUTH_PARAMS = require('./../../auth/auth.enum')
 const VALIDATORS = require('../enums/validators.enum')
 const STATUS_CODES = require('../enums/status-codes.enums')
 const getAnErrorResponse = require('./../helpers/responses/error.response')
+const STATUS = require('../enums/status.enum')
 
 // Instances
 const userService = new UserService()
@@ -21,7 +21,7 @@ const userService = new UserService()
  * @param {any} next
  * @returns any
  */
-const validJWT = (req, res, next) => {
+const validJWT = async (req, res, next) => {
   const token = req.header('x-token')
 
   if (!token) {
@@ -32,11 +32,10 @@ const validJWT = (req, res, next) => {
     // @ts-ignore
     const { uid, name } = jwt.verify(token, process.env.SECRET_JWT_SEED)
     // Consultar user in BD
-    const user = userService.getOneById(uid)
+    const userResp = await userService.getOneById(uid)
 
-    if (user === null) {
-      const errorRespose = getAnErrorResponse(VALIDATORS.NOEXIST, USER_PARAMS.USER)
-      return res.status(STATUS_CODES.NO_CONTENT).json(errorRespose)
+    if (userResp.status === STATUS.ERROR) {
+      return res.status(STATUS_CODES.NO_CONTENT).json(userResp)
     }
 
     // @ts-ignore
