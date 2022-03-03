@@ -1,7 +1,7 @@
 // @ts-check
 const { Schema, model } = require('mongoose')
 
-const userSchema = Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true

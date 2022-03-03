@@ -1,35 +1,82 @@
 // @ts-check
 const User = require('./user.model')
 
+const UserFormat = require('../shared/helpers/responses/user.format')
+
 class UserDAL {
+  /**
+   * Save in DB a new User
+   * @param {UserFormat} userData User data
+   * @returns {Promise<UserFormat>} User data
+   */
   async createOne (userData) {
     const newUser = new User(userData)
-    return await newUser.save()
-  }
-
-  async getById (id) {
-    return await User.findById(id).populate('activities')
+    const resp = await newUser.save()
+    return this.getUser(resp)
   }
 
   /**
-   * @param {string} email
-   * @returns {Promise<User>}
+   * Get user by id from db
+   * @param {string} idUser User identification
+   * @returns {Promise<UserFormat>} User data
+   */
+  async getById (idUser) {
+    const resp = await User.findById(idUser).populate('activities')
+    return this.getUser(resp)
+  }
+
+  /**
+   * Get user by email from db
+   * @param {string} email User email
+   * @returns {Promise<UserFormat>} User data
    */
   async getByEmail (email) {
-    return await User.findOne({ email })
+    const resp = await User.findOne({ email })
+    return this.getUser(resp)
   }
 
-  async includActivity (userId, activityId) {
+  /**
+   * Includ activity reference from User
+   * @param {string} userId User identification
+   * @param {string} activityId Activity identification
+   * @returns {Promise<UserFormat>} User data
+   */
+  async includeActivity (userId, activityId) {
     const user = await User.findById(userId)
+    // Include activity
     user.activities = user.activities.concat(activityId)
-    return await user.save()
+    const resp = await user.save()
+
+    return this.getUser(resp)
   }
 
+  /**
+   * Remove activity reference from User
+   * @param {string} userId User identification
+   * @param {string} activityId Acivity identification
+   * @returns {Promise<UserFormat>} User data
+   */
   async removeActivity (userId, activityId) {
     const user = await User.findById(userId)
+    // Remove activity
     const indexActivityId = user.activities.indexOf(activityId)
     user.activities.splice(indexActivityId, 1)
-    return await user.save()
+    const resp = await user.save()
+
+    return this.getUser(resp)
+  }
+
+  /**
+   * Build a user with the standart format
+   * @param {any} userData User data
+   * @returns {UserFormat} User formatted
+   */
+  getUser (userData) {
+    if (userData !== null) {
+      const { name, email, password, activities, id } = userData.toJSON()
+      return new UserFormat(name, email, password, activities, id)
+    }
+    return null
   }
 }
 

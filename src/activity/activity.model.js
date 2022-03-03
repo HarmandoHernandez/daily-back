@@ -31,7 +31,6 @@ const activitySchema = new Schema({
 activitySchema.set('toJSON', {
   transform: (_document, returnedObject) => {
     returnedObject.id = returnedObject._id
-    delete returnedObject.user
     delete returnedObject._id
     delete returnedObject.__v
   }

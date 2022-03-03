@@ -1,7 +1,6 @@
 // @ts-check
 
 const AUTH_PARAMS = {
-  USER: 'user',
   TOKEN: 'token'
 }
 

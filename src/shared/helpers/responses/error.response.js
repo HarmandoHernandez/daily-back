@@ -1,18 +1,21 @@
 // @ts-check
 
 // eslint-disable-next-line no-unused-vars
-import ErrorFormat from './error.format'
-import GeneralFormat from './general.format'
-import STATUS from '../../enums/status.enum'
+const ErrorFormat = require('./error.format')
+const GeneralFormat = require('./general.format')
+const STATUS = require('./../../enums/status.enum')
 
 /**
  * Build Error response
- * @param {ErrorFormat[]} errorData Error data
- * @param {string} status Custom status of response
+ * @param {string} error Error data
+ * @param {string} param Custom status of response
  * @returns {GeneralFormat} Error response
  */
-const getErrorResponse = (errorData, status = STATUS.ERROR) => {
-  return new GeneralFormat(status, errorData)
+const getAnErrorResponse = (error, param, cause = '') => {
+  if (error) console.error(cause)
+  const errors = []
+  errors.push(new ErrorFormat(error, param))
+  return new GeneralFormat(STATUS.ERROR, errors)
 }
 
-module.exports = getErrorResponse
+module.exports = getAnErrorResponse

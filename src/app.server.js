@@ -2,8 +2,18 @@
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
+// eslint-disable-next-line no-unused-vars
+const Route = require('./shared/models/route.model')
+// eslint-disable-next-line no-unused-vars
+const Database = require('./app.db')
 
 class Server {
+  /**
+   * Create instance of server
+   * @param {string} port
+   * @param {Route[]} router
+   * @param {Database} database
+   */
   constructor (port, router, database) {
     this.app = express()
     this.port = port
@@ -27,6 +37,9 @@ class Server {
     })
   }
 
+  /**
+   * Start server listening
+   */
   active () {
     this.app.listen(this.port, () => {
       console.log('Server listening:', this.port)

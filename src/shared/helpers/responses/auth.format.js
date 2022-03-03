@@ -1,8 +1,12 @@
 // @ts-check
-export default class AuthFormat {
+
+// eslint-disable-next-line no-unused-vars
+const { ObjectId } = require('mongoose')
+
+class AuthFormat {
   /**
      * Auth format by API response
-     * @param {string} id User identification
+     * @param {ObjectId} id User identification
      * @param {string} name User name
      * @param {string} token User token
      */
@@ -12,3 +16,5 @@ export default class AuthFormat {
     this.token = token
   }
 }
+
+module.exports = AuthFormat

@@ -1,100 +1,117 @@
 // @ts-check
+// Customs
 const ActivityDAL = require('./activity.dal')
 const UserService = require('./../user/user.service')
+const VALIDATORS = require('../shared/enums/validators.enum')
+const STATUS = require('../shared/enums/status.enum')
+const ACTIVITY_PARAMS = require('./activity.enum')
 // eslint-disable-next-line no-unused-vars
-const ActivityC = require('./activity')
+const GeneralFormat = require('../shared/helpers/responses/general.format')
+// eslint-disable-next-line no-unused-vars
+const ActivityFormat = require('../shared/helpers/responses/activity.format')
+const getAnErrorResponse = require('../shared/helpers/responses/error.response')
 
+// Instances
 const activityDAL = new ActivityDAL()
 
-const getErrorResponse = require('./../shared/helpers/responses/error.response')
-const { default: ErrorFormat } = require('../shared/helpers/responses/error.format')
-const { default: VALIDATORS } = require('../shared/enums/validators.enum')
-const { default: ACTIVITY_PARAMS } = require('./activity.enum')
-const { default: STATUS } = require('../shared/enums/status.enum')
-
 class ActivityService {
+  /**
+   * Logic and format to get Activity by id
+   * @param {string} id Activity identification
+   * @returns {Promise<GeneralFormat>} Response format
+   */
   async getOneById (id) {
     try {
       const activityDb = await activityDAL.getOneById(id)
-      if (activityDb === null) {
-        const errors = [new ErrorFormat(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)]
-        const response = getErrorResponse(errors, STATUS.ERROR)
-        return response
+      if (activityDb !== null) {
+        return new GeneralFormat(STATUS.SUCCESS, activityDb)
       }
-      return new GeneralFormat(STATUS.SUCCESS, activityDb)
+      return getAnErrorResponse(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'GET_BY_ID')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:GETBYID', error)
     }
   }
 
   /**
-   *
-   * @param {ActivityC} activityData
-   * @returns {Promise<GeneralFormat>}
+   * Logic and format to create new Activity
+   * @param {ActivityFormat} activityData Activity data
+   * @returns {Promise<GeneralFormat>} Response formatted
    */
   async createOne (activityData) {
     try {
-      // TODO: guardar id en collection User
+      // Create activity
       const activityDb = await activityDAL.createOne(activityData)
       if (activityDb === null) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          new CError(VALIDATORS.INCORRECT, ACTIVITY_PARAMS.ACTIVITY))
+        return getAnErrorResponse(VALIDATORS.INCORRECT, ACTIVITY_PARAMS.ACTIVITY)
       }
+
+      // Include Activity identificator to owner User
       const userService = new UserService()
-      await userService.includActivity(activityData.user, activityDb._id)
+      const activityIncluded = await userService.includeActivity(activityData.user, activityDb.id)
+
+      if (activityIncluded.status === STATUS.ERROR) {
+        return activityIncluded
+      }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'CREATE')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:CREATE', error)
     }
   }
 
+  /**
+   * Logic and format to update Activity
+   * @param {ActivityFormat} activityData Activity data
+   * @returns {Promise<GeneralFormat>} Response formatted
+   */
   async updateOne (activityData) {
     try {
+      // Update activity
       const activityDb = await activityDAL.updateOne(activityData)
-      // Si no es null
-      if (activityDb === null) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          new CError(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY))
+      if (activityDb !== null) {
+        return new GeneralFormat(STATUS.SUCCESS, activityDb)
       }
-      return new GeneralFormat(STATUS.SUCCESS, activityDb)
+      return getAnErrorResponse(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'CREATE')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:UPDATE', error)
     }
   }
 
+  /**
+   * Logic to delete an Activity
+   * @param {string} id Activity identification
+   * @returns {Promise<GeneralFormat>} Response formatted
+   */
   async deleteOne (id) {
     try {
+      // Delete activity
       const activityDb = await activityDAL.deleteOne(id)
-      // TODO: Optimizar para todas las funciones
       if (activityDb === null) {
-        return new GeneralFormat(
-          STATUS.ERROR,
-          new CError(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY))
+        return getAnErrorResponse(VALIDATORS.NOEXIST, ACTIVITY_PARAMS.ACTIVITY)
       }
-      const userService = new UserService()
-      await userService.removeActivity(activityDb.user, activityDb._id)
 
+      // Delete Activity identificator of owner user
+      const userService = new UserService()
+      const activityIncluded = await userService.removeActivity(activityDb.user, activityDb.id)
+
+      if (activityIncluded.status === STATUS.ERROR) {
+        return activityIncluded
+      }
       return new GeneralFormat(STATUS.SUCCESS, activityDb)
     } catch (error) {
-      console.error(error)
-      return new GeneralFormat(
-        STATUS.ERROR,
-        new CError('FATAL_ERROR', 'CREATE')
-      )
+      return getAnErrorResponse(VALIDATORS.FATAL_ERROR, 'ACTIVITY:DELETE', error)
+    }
+  }
+
+  /**
+   * Logic and format to get Activity Owner
+   * @param {string} id Activity identification
+   * @returns {Promise<import('mongoose').ObjectId>} Response format
+   */
+  async getActivityOwner (id) {
+    try {
+      return await activityDAL.getActivityOwner(id)
+    } catch (error) {
+      return null
     }
   }
 }

@@ -1,41 +1,60 @@
 // @ts-check
 
-const { response } = require('express')
-const { responseError, responseSuccess } = require('../shared/helpers/responses.helper')
+// eslint-disable-next-line no-unused-vars
+const { response, request } = require('express')
+const STATUS_CODES = require('../shared/enums/status-codes.enums')
 
 const STATUS = require('../shared/enums/status.enum')
+const getStatusCode = require('../shared/helpers/status-code.helper')
 const AuthService = require('./auth.service')
 
 const authService = new AuthService()
 
+// TODO: Evaluar los tipos de errores para responder codigo de error adecuado
 class AuthController {
-  async createUser (req, res = response) {
+  /**
+   * Managment API request about Sing Up
+   */
+  async singup (req = request, res = response) {
     const { email, name, password } = req.body
     const response = await authService.singup(email, name, password)
-    // TODO: Evaluar los tipos de errores para responder codigo de error
+
     if (response.status === STATUS.SUCCESS) {
-      return res.status(200).json(response)
+      return res.status(STATUS_CODES.OK).json(response)
     }
-    return res.status(400).json(response)
+    // STATUS: ERROR
+    const status = getStatusCode(response.message[0].error)
+    return res.status(status).json(response)
   }
 
-  async loginUser (req, res = response) {
+  /**
+   * Managment API request about Sing In
+   */
+  async signin (req = request, res = response) {
     const { email, password } = req.body
     const response = await authService.signin(email, password)
-    // TODO: Evaluar los tipos de errores para responder codigo de error
     if (response.status === STATUS.SUCCESS) {
-      return res.status(200).json(response)
+      return res.status(STATUS_CODES.OK).json(response)
     }
-    return res.status(400).json(response)
+    // STATUS: ERROR
+    const status = getStatusCode(response.message[0].error)
+    return res.status(status).json(response)
   }
 
-  async refreshToken (req, res = response) {
-    const { uid, name } = req // Params validates
-    const newToken = await authService.getNewToken(uid, name)
-    if (newToken.length > 0) {
-      return responseSuccess(res, 201, uid, name, newToken)
+  /**
+   * Managment API request about Generate new Token
+   */
+  async refreshToken (req = request, res = response) {
+    // @ts-ignore
+    const { uid, name } = req
+    const response = await authService.getNewToken(uid, name)
+
+    if (response.status === STATUS.SUCCESS) {
+      return res.status(STATUS_CODES.OK).json(response)
     }
-    return responseError(res)
+    // STATUS: ERROR
+    const status = getStatusCode(response.message[0].error)
+    return res.status(status).json(response)
   }
 }
 
